@@ -3,6 +3,16 @@
 #include <complex>
 #include <functional>
 
+#include <pthread.h>
+
+
+struct DrawFractalInfo {
+    sf::Uint8 *_pixels;
+    int _width;
+    int _height;
+    sf::FloatRect _viewFrame;
+};
+
 
 typedef std::pair<sf::Color,bool> MaybeColor;
 typedef std::complex<float> Complex;
@@ -63,17 +73,23 @@ sf::Color getColorForStartLocation(float x, float y) {
 }
 
 
-void drawFractal(sf::Image &image, int width, int height, sf::FloatRect bounds) {
+void *drawFractal(void *_info) {
     // Draw the portion of the fractal inside bounds onto the image
+
+    // Extract loop data
+    DrawFractalInfo *info = (DrawFractalInfo*) _info;
+
+    sf::Uint8 *pixels = info->_pixels;
+    int width = info->_width;
+    int height = info->_height;
+    sf::FloatRect bounds = info->_viewFrame;
 
     float xStep = bounds.width / width;
     float yStep = bounds.height / height;
-    sf::Uint8 *pixels = new sf::Uint8[width * height * 4]; // Four bytes for each pixel (RGBA)
 
-    // Make the whole image cyan
-
-    for(int xPix=0; xPix<width; xPix++) {
-        for(int yPix=0; yPix<height; yPix++) {
+    // Loop and draw
+    for(int yPix=0; yPix<height; yPix++) {
+        for(int xPix=0; xPix<width; xPix++) {
             float x = bounds.left + xPix * xStep;
             float y = bounds.top + yPix * yStep;
 
@@ -86,26 +102,32 @@ void drawFractal(sf::Image &image, int width, int height, sf::FloatRect bounds) 
             pixels[offset + 3] = color.a;
         }
     }
-
-    std::cout << "Loading image from memory..." << std::endl;
-    image.create((uint) width, (uint) height, pixels);
-    std::cout << "Loaded." << std::endl;
-
-    //delete pixels;
 }
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Newton fractal");
     sf::Event nextEvent;
 
+    sf::Uint8 *pixels = new sf::Uint8[800 * 600 * 4]; // Four bytes for each pixel (RGBA)
     sf::Image fractalImage;
-    drawFractal(fractalImage, 800, 600, sf::FloatRect(-2.4f, -1.8f, 4.8, 3.6));
 
     sf::Texture fractalTexture;
-    fractalTexture.loadFromImage(fractalImage);
     fractalTexture.setSmooth(true);
     sf::Sprite fractalSprite;
-    fractalSprite.setTexture(fractalTexture, true);
+
+    DrawFractalInfo info;
+    info._pixels = pixels;
+    info._width = 800;
+    info._height = 600;
+    info._viewFrame = sf::FloatRect(-2.4f, -1.8f, 4.8, 3.6);
+
+    //drawFractal(&info);
+
+    pthread_t drawFractalThread;
+    pthread_create(&drawFractalThread,
+                   NULL,
+                   drawFractal,
+                   &info);
 
     while(window.isOpen()) {
         while(window.pollEvent(nextEvent)) {
@@ -115,6 +137,12 @@ int main() {
             }
         }
 
+        // Reload the pixels onto the screen
+        fractalImage.create(800, 600, pixels);
+        fractalTexture.loadFromImage(fractalImage);
+        fractalSprite.setTexture(fractalTexture, true);
+
+        // Draw the pixels
         window.draw(fractalSprite);
         window.display();
     }
