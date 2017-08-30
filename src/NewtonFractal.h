@@ -9,9 +9,16 @@
 #include "Typedefs.h"
 
 class NewtonFractal {
+    std::vector<Complex> polynomialZeros;
+    std::vector<Complex> derivativTerms;    // Element N is x^N term (i.e. 0th element is constant term)
+
     TransformFun transform;
     ColorFun colorFun;
     int infinity;
+
+    void computeDerivative();
+    Complex evaluatePolynomial(Complex input);
+    Complex evaluateDerivative(Complex input);
 
 public:
     NewtonFractal();
