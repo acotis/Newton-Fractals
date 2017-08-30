@@ -5,72 +5,8 @@
 
 #include <pthread.h>
 
-
-struct DrawFractalInfo {
-    sf::Uint8 *_pixels;
-    int _width;
-    int _height;
-    sf::FloatRect _viewFrame;
-};
-
-
-typedef std::pair<sf::Color,bool> MaybeColor;
-typedef std::complex<float> Complex;
-typedef std::function<Complex*(Complex)> TransformFun;
-typedef std::function<MaybeColor*(Complex, int)> ColorFun;
-
-int INF = 20;
-
-
-TransformFun TRANSFORM = [](Complex z) {
-    Complex num = z*z*z - 1.0f;
-    Complex den = 3.0f*z*z;
-    return new Complex(z - num/den);
-};
-
-ColorFun COLORATION = [](std::complex<float> z, int iterations) {
-    Complex a(1, 0);
-    Complex b(-.5f, -.866f);
-    Complex c(-.5f, .866f);
-
-    sf::Color color;
-    bool finished = true;
-
-    float limit = .01;
-
-    float greyF = 1 - (iterations + .0f) / INF;
-    greyF = std::pow(greyF, 1.0f);
-    sf::Uint8 grey = (sf::Uint8) (255*greyF);
-
-    if(std::abs(z-a) < limit) color = sf::Color(grey, 0, 0);
-    else if(std::abs(z-b) < limit) color = sf::Color(0, grey, 0);
-    else if(std::abs(z-c) < limit) color = sf::Color(0, 0, grey);
-    else {
-        color = sf::Color(0, 0, 0);
-        finished = false; // Keep going only if not near a root
-    }
-
-    return new MaybeColor(color, finished);
-};
-
-
-sf::Color getColorForStartLocation(float x, float y) {
-    std::complex<float> z(x, y);
-    MaybeColor result;
-
-    int iterations = 0;
-
-    while(true) {
-        result = *COLORATION(z, iterations);
-
-        if(result.second || iterations==INF) {
-            return result.first;
-        }
-
-        z = *TRANSFORM(z);
-        iterations++;
-    }
-}
+#include "Typedefs.h"
+#include "NewtonFractal.h"
 
 
 void *drawFractal(void *_info) {
@@ -79,6 +15,7 @@ void *drawFractal(void *_info) {
     // Extract loop data
     DrawFractalInfo *info = (DrawFractalInfo*) _info;
 
+    NewtonFractal *fractal = info->_fractal;
     sf::Uint8 *pixels = info->_pixels;
     int width = info->_width;
     int height = info->_height;
@@ -93,7 +30,7 @@ void *drawFractal(void *_info) {
             float x = bounds.left + xPix * xStep;
             float y = bounds.top + yPix * yStep;
 
-            sf::Color color = getColorForStartLocation(x, y);
+            sf::Color color = fractal->getColorForStartLocation(x, y);
 
             int offset = (yPix*width + xPix) * 4;
             pixels[offset] = color.r;
@@ -116,6 +53,7 @@ int main() {
     sf::Sprite fractalSprite;
 
     DrawFractalInfo info;
+    info._fractal = new NewtonFractal;
     info._pixels = pixels;
     info._width = 800;
     info._height = 600;
