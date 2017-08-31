@@ -8,6 +8,12 @@
 #include "NewtonFractal.h"
 
 
+const sf::Color NewtonFractal::ROOT_COLORS[] = {
+    sf::Color::Red, sf::Color::Blue, sf::Color::Green,
+    sf::Color::Yellow, sf::Color::Cyan, sf::Color::Magenta
+};
+
+
 /* Internal functionality */
 
 void NewtonFractal::computeDerivative() {
@@ -26,10 +32,10 @@ void NewtonFractal::computeDerivative() {
     // Calculate the terms of the derivative
     // (If there is only one term (the constant term) of the polynomial, the derivative is zero)
     if(polynomialTerms.size() == 1) {
-        derivativTerms.push_back(Complex(0, 0));
+        derivativeTerms.push_back(Complex(0, 0));
     } else {
         for(int i=1; i<polynomialTerms.size(); i++) {
-            derivativTerms.push_back(polynomialTerms[i] * (float) i);
+            derivativeTerms.push_back(polynomialTerms[i] * (float) i);
         }
     }
 
@@ -40,8 +46,8 @@ void NewtonFractal::computeDerivative() {
     }
     std::cout << std::endl;
 
-    for(int i=0; i<derivativTerms.size(); i++) {
-        std::cout << derivativTerms[i] << " ";
+    for(int i=0; i<derivativeTerms.size(); i++) {
+        std::cout << derivativeTerms[i] << " ";
     }
     std::cout << std::endl;
 }
@@ -61,8 +67,8 @@ Complex NewtonFractal::evaluateDerivative(Complex input) {
     Complex inputPower(1, 0); // First 1, then input, then input^2, then input^3, etc
     Complex resultAccum(0, 0); // Each term adds to this
 
-    for(int i=0; i<derivativTerms.size(); i++) {
-        resultAccum += inputPower*derivativTerms[i];
+    for(int i=0; i<derivativeTerms.size(); i++) {
+        resultAccum += inputPower*derivativeTerms[i];
         inputPower *= input;
     }
 
@@ -75,8 +81,9 @@ Complex NewtonFractal::evaluateDerivative(Complex input) {
 
 NewtonFractal::NewtonFractal() {
     polynomialZeros.push_back(Complex(1, 0));
-    polynomialZeros.push_back(Complex(-.5f, 0));
-    polynomialZeros.push_back(Complex(0, 1));
+    polynomialZeros.push_back(Complex(-1, 0));
+    polynomialZeros.push_back(Complex(0, .5f));
+    polynomialZeros.push_back(Complex(0, -1));
 
     computeDerivative();
 
@@ -95,28 +102,21 @@ NewtonFractal::NewtonFractal() {
     };
 
     colorFun = [this](std::complex<float> z, int iterations) {
-        Complex a = polynomialZeros[0];
-        Complex b = polynomialZeros[1];
-        Complex c = polynomialZeros[2];
+        // If very close to a root, return the color associated with that root
+        for(int i=0; i<polynomialZeros.size(); i++) {
+            if(std::abs(z-polynomialZeros[i]) < .01) {
+                sf::Color base = ROOT_COLORS[i];
+                float shade = 1 - ((iterations + .0f)/infinity);
+                base.r *= shade;
+                base.g *= shade;
+                base.b *= shade;
 
-        sf::Color color;
-        bool finished = true;
-
-        float limit = .01;
-
-        float greyF = 1 - (iterations + .0f) / infinity;
-        greyF = std::pow(greyF, 1.0f);
-        sf::Uint8 grey = (sf::Uint8) (255 * greyF);
-
-        if (std::abs(z - a) < limit) color = sf::Color(grey, 0, 0);
-        else if (std::abs(z - b) < limit) color = sf::Color(0, grey, 0);
-        else if (std::abs(z - c) < limit) color = sf::Color(0, 0, grey);
-        else {
-            color = sf::Color(0, 0, 0);
-            finished = false; // Keep going only if not near a root
+                return new MaybeColor(base, true);
+            }
         }
 
-        return new MaybeColor(color, finished);
+        // Else, return black/false
+        return new MaybeColor(sf::Color::Black, false);
     };
 };
 
