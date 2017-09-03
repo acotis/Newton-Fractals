@@ -4,13 +4,20 @@
 
 #include <deque>
 #include <iostream>
-#include <stdfix.h>
 #include "NewtonFractal.h"
+#include "Constants.h"
 
 
 const sf::Color NewtonFractal::ROOT_COLORS[] = {
-    sf::Color::Red, sf::Color::Blue, sf::Color::Green,
-    sf::Color::Yellow, sf::Color::Cyan, sf::Color::Magenta
+        //sf::Color(255, 128, 0)
+        //sf::Color(255, 80, 120),
+        sf::Color::Red, sf::Color::Blue,
+        sf::Color::White, sf::Color::White, sf::Color::White,
+        sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+
+//        sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
+//    sf::Color::Yellow, sf::Color::Magenta, sf::Color::Cyan,
+//    sf::Color::White, sf::Color(255, 128, 0)
 };
 
 
@@ -52,7 +59,6 @@ void NewtonFractal::computeDerivative() {
     std::cout << std::endl;
 }
 
-
 Complex NewtonFractal::evaluatePolynomial(Complex input) {
     Complex resultAccum(1, 0); // Each zero's "contribution" is multiplied into here
 
@@ -78,12 +84,13 @@ Complex NewtonFractal::evaluateDerivative(Complex input) {
 
 /* Public functionality */
 
-
 NewtonFractal::NewtonFractal() {
-    polynomialZeros.push_back(Complex(1, 0));
-    polynomialZeros.push_back(Complex(-1, 0));
-    polynomialZeros.push_back(Complex(0, .5f));
-    polynomialZeros.push_back(Complex(0, -1));
+    for(int i=0; i<6; i++) {
+        float x = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_WIDTH*1.2f - FractalConstants::VIEW_WIDTH*.6f;
+        float y = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_HEIGHT*1.2f - FractalConstants::VIEW_HEIGHT*.6f;
+        polynomialZeros.push_back(Complex(x, y));
+        //polynomialZeros.push_back(Complex(x, y));
+    }
 
     computeDerivative();
 
@@ -91,7 +98,7 @@ NewtonFractal::NewtonFractal() {
     //std::cout << "P(" << test << ") = " << evaluatePolynomial(test) << std::endl;
     //std::cout << "P'(" << test << ") = " << evaluateDerivative(test) << std::endl;
 
-    infinity = 20; // ;-)
+    infinity = 40; // ;-)
 
     transform = [this](Complex z) {
         //Complex num = z*z*z - 1.0f;
@@ -101,12 +108,14 @@ NewtonFractal::NewtonFractal() {
         return new Complex(z - num/den);
     };
 
-    colorFun = [this](std::complex<float> z, int iterations) {
+    colorFun = [this](Complex z, int iterations) {
         // If very close to a root, return the color associated with that root
         for(int i=0; i<polynomialZeros.size(); i++) {
             if(std::abs(z-polynomialZeros[i]) < .01) {
+                float shade = ((iterations + .0f)/infinity) + .1f;
+                shade = std::min(std::max(shade, 0.0f), 1.0f);
+
                 sf::Color base = ROOT_COLORS[i];
-                float shade = 1 - ((iterations + .0f)/infinity);
                 base.r *= shade;
                 base.g *= shade;
                 base.b *= shade;

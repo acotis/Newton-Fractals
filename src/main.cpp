@@ -7,6 +7,7 @@
 
 #include "Typedefs.h"
 #include "NewtonFractal.h"
+#include "Constants.h"
 
 
 void *drawFractal(void *_info) {
@@ -42,10 +43,13 @@ void *drawFractal(void *_info) {
 }
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "Newton fractal");
+    srand(time(NULL));
+
+    // (Image is drawn at half size)
+    sf::RenderWindow window(sf::VideoMode(FractalConstants::DISPLAY_WIDTH, FractalConstants::DISPLAY_HEIGHT), "Newton fractal");
     sf::Event nextEvent;
 
-    sf::Uint8 *pixels = new sf::Uint8[800 * 600 * 4]; // Four bytes for each pixel (RGBA)
+    sf::Uint8 *pixels = new sf::Uint8[FractalConstants::IMG_WIDTH * FractalConstants::IMG_WIDTH * 4]; // Four bytes for each pixel (RGBA)
     sf::Image fractalImage;
 
     sf::Texture fractalTexture;
@@ -55,9 +59,10 @@ int main() {
     DrawFractalInfo info;
     info._fractal = new NewtonFractal;
     info._pixels = pixels;
-    info._width = 800;
-    info._height = 600;
-    info._viewFrame = sf::FloatRect(-2.4f, -1.8f, 4.8, 3.6);
+    info._width = FractalConstants::IMG_WIDTH;
+    info._height = FractalConstants::IMG_HEIGHT;
+    info._viewFrame = sf::FloatRect(-FractalConstants::VIEW_WIDTH/2.0f, -FractalConstants::VIEW_HEIGHT/2.0f,
+                                    FractalConstants::VIEW_WIDTH, FractalConstants::VIEW_HEIGHT);
 
     //drawFractal(&info);
 
@@ -75,10 +80,11 @@ int main() {
             }
         }
 
-        // Reload the pixels onto the screen
-        fractalImage.create(800, 600, pixels);
+        // Reload the pixels into the texture
+        fractalImage.create(FractalConstants::IMG_WIDTH, FractalConstants::IMG_HEIGHT, pixels);
         fractalTexture.loadFromImage(fractalImage);
         fractalSprite.setTexture(fractalTexture, true);
+        fractalSprite.setScale(FractalConstants::DISPLAY_SHRINK, FractalConstants::DISPLAY_SHRINK);
 
         // Draw the pixels
         window.draw(fractalSprite);

@@ -1,0 +1,10 @@
++ Make an on-screen save-to-png (or jpg or whatever) button
++ Make an on-screen polynomial randomizer
++ Make an on-screen color picker
++ Make the zeros drag-able
++ Make it be able to take the coefficients of the terms of the polynomial, not just the roots
+    (Probably pull polynomial functionality out into a class with methods:
+        Polynomial(vector<Complex>) // Construct from zeros
+        Polynomial(vector<pair<Complex,int>) // Construct from terms
+        getDerivative()
+        evaluateAt(Complex))
