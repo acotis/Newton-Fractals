@@ -11,6 +11,11 @@ add_executable(NewtonFractals ${SOURCE_FILES})
 # Threads package
 find_package(Threads REQUIRED)
 
+# PNG++ package
+find_package(PNG REQUIRED)
+include_directories(${PNG_INCLUDE_DIR})
+target_link_libraries(NewtonFractals ${PNG_LIBRARY})
+
 # Tell cmake where to find the SFML-finding script
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake-modules")
 # Use the script to find SFML

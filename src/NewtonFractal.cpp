@@ -91,6 +91,7 @@ NewtonFractal::NewtonFractal() {
         polynomialZeros.push_back(Complex(x, y));
         //polynomialZeros.push_back(Complex(x, y));
     }
+    //polynomialZeros.push_back(Complex(0, 0));
 
     computeDerivative();
 
