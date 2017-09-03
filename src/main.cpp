@@ -11,7 +11,7 @@
 #include "Constants.h"
 
 
-void saveImageAs(std::string name, sf::Uint8 *pixels) {
+void saveImage(sf::Uint8 *pixels) {
     std::cout << "Creating image..." << std::endl;
 
     png::image<png::rgb_pixel> image(FractalConstants::IMG_WIDTH, FractalConstants::IMG_HEIGHT);
@@ -19,18 +19,38 @@ void saveImageAs(std::string name, sf::Uint8 *pixels) {
     std::cout << "Done.  Writing pixels onto the image..." << std::endl;
 
     for(int y=0; y<FractalConstants::IMG_HEIGHT; y++) {
-        //std::cout << "y = " << y << std::endl;
+        //std::cout << "  y = " << y << std::endl;
         for(int x=0; x<FractalConstants::IMG_WIDTH; x++) {
-            //std::cout << "  x = " << x << std::endl;
+            //std::cout << "    x = " << x << std::endl;
             int ref = (y * FractalConstants::IMG_WIDTH + x) * 4;
             //image[y][x] = png::rgb_pixel(0, 0, 0);
             image[y][x] = png::rgb_pixel(pixels[ref], pixels[ref+1], pixels[ref+2]);
         }
     }
 
-    std::cout << "Done.  Writing image to disk..." << std::endl;
+    std::cout << "Done.  Finding an unused file name..." << std::endl;
 
-    image.write(name);
+    int i=1;
+    std::string filename;
+
+    while(true) {
+        filename = std::to_string(i);
+        while(filename.length() < 3) filename = "0" + filename;
+
+        std::cout << "Pure number: \"" << filename << "\"" << std::endl;
+
+        filename = "output/fractal" + filename + ".png";
+
+        if(!std::ifstream(filename)) {
+            break;
+        }
+
+        i++;
+    }
+
+    std::cout << "Done.  Saving image as " << filename << "..." << std::endl;
+
+    image.write(filename);
 
     std::cout << "Done." << std::endl;
 }
@@ -68,7 +88,7 @@ void *drawFractal(void *_info) {
     }
 
     // Save image
-    saveImageAs("output.png", pixels);
+    saveImage(pixels);
 }
 
 

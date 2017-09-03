@@ -11,8 +11,8 @@
 const sf::Color NewtonFractal::ROOT_COLORS[] = {
         //sf::Color(255, 128, 0)
         //sf::Color(255, 80, 120),
-        sf::Color::Red, sf::Color::Blue,
-        sf::Color::White, sf::Color::White, sf::Color::White,
+        sf::Color::White, sf::Color::Blue,
+        sf::Color::Red, sf::Color::White, sf::Color::White,
         sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
 
 //        sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
@@ -92,6 +92,13 @@ NewtonFractal::NewtonFractal() {
         //polynomialZeros.push_back(Complex(x, y));
     }
     //polynomialZeros.push_back(Complex(0, 0));
+
+    //polynomialZeros.push_back(Complex(-1.34308f, -.151646f));
+    //polynomialZeros.push_back(Complex(-1.08480f, -1.59306f));
+    //polynomialZeros.push_back(Complex(-.95964f, 1.78098f));
+    //polynomialZeros.push_back(Complex(-.054242f, -1.398502f));
+    //polynomialZeros.push_back(Complex(.236283f, 1.59648f));
+    //polynomialZeros.push_back(Complex(.37351f, 1.47488f));
 
     computeDerivative();
 
