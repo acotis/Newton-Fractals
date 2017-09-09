@@ -19,6 +19,8 @@ namespace FractalConstants {
 
     const float VIEW_WIDTH = 3.2; // Size of the visible portion of the complex plane
     const float VIEW_HEIGHT = VIEW_WIDTH/ASPECT_RATIO;
+
+    sf::Uint8 * const PIXELS = new sf::Uint8[FractalConstants::IMG_WIDTH * FractalConstants::IMG_WIDTH * 4]; // Four bytes for each pixel (RGBA)
 }
 
 

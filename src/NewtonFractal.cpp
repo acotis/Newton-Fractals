@@ -9,11 +9,13 @@
 
 
 const sf::Color NewtonFractal::ROOT_COLORS[] = {
-        //sf::Color(255, 128, 0)
+        //sf::Color(255, 128, 0),
         //sf::Color(255, 80, 120),
-        sf::Color::White, sf::Color::Blue,
-        sf::Color::Red, sf::Color::White, sf::Color::White,
-        sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+        sf::Color::Red, sf::Color::Blue,
+        sf::Color::White,
+        sf::Color::Red, sf::Color::Blue,
+        sf::Color::Red, sf::Color::Blue,
+        //sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
 
 //        sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
 //    sf::Color::Yellow, sf::Color::Magenta, sf::Color::Cyan,
@@ -85,7 +87,7 @@ Complex NewtonFractal::evaluateDerivative(Complex input) {
 /* Public functionality */
 
 NewtonFractal::NewtonFractal() {
-    for(int i=0; i<6; i++) {
+    for(int i=0; i<7; i++) {
         float x = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_WIDTH*1.2f - FractalConstants::VIEW_WIDTH*.6f;
         float y = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_HEIGHT*1.2f - FractalConstants::VIEW_HEIGHT*.6f;
         polynomialZeros.push_back(Complex(x, y));
@@ -120,7 +122,7 @@ NewtonFractal::NewtonFractal() {
         // If very close to a root, return the color associated with that root
         for(int i=0; i<polynomialZeros.size(); i++) {
             if(std::abs(z-polynomialZeros[i]) < .01) {
-                float shade = ((iterations + .0f)/infinity) + .1f;
+                float shade = ((iterations + .0f)/infinity) + .25f;
                 shade = std::min(std::max(shade, 0.0f), 1.0f);
 
                 sf::Color base = ROOT_COLORS[i];

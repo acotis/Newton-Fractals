@@ -18,11 +18,7 @@ class NewtonFractal;
 
 struct DrawFractalInfo {
     NewtonFractal *_fractal;
-
     sf::Uint8 *_pixels;
-    int _width;
-    int _height;
-    sf::FloatRect _viewFrame;
 };
 
 #endif //NEWTONFRACTALS_TYPEDEFS_H
