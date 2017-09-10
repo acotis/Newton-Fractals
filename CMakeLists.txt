@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/evan/Programs/C++/CLionProjects/NewtonFractals/cmake-build-debug")
 
-set(SOURCE_FILES src/main.cpp src/Constants.h src/NewtonFractal.cpp src/NewtonFractal.h src/Typedefs.h src/Button.cpp src/Button.h)
+set(SOURCE_FILES src/main.cpp src/Constants.h src/NewtonFractal.cpp src/NewtonFractal.h src/Typedefs.h src/Button.cpp src/Button.h src/FractalCanvas.cpp src/FractalCanvas.h)
 add_executable(NewtonFractals ${SOURCE_FILES})
 
 # Threads package
