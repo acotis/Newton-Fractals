@@ -11,11 +11,14 @@
 const sf::Color NewtonFractal::ROOT_COLORS[] = {
         //sf::Color(255, 128, 0),
         //sf::Color(255, 80, 120),
-        sf::Color::Red, sf::Color::Blue,
-        sf::Color::White,
-        sf::Color::Red, sf::Color::Blue,
-        sf::Color::Red, sf::Color::Blue,
-        //sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+        //sf::Color::Red, sf::Color::Blue,
+        //sf::Color::Green, sf::Color::Yellow,
+        //sf::Color::Cyan, sf::Color::Magenta, sf::Color::White,
+        //sf::Color::Black,
+        sf::Color::Green,
+        sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+        sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+
 
 //        sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
 //    sf::Color::Yellow, sf::Color::Magenta, sf::Color::Cyan,
@@ -121,8 +124,13 @@ NewtonFractal::NewtonFractal() {
     colorFun = [this](Complex z, int iterations) {
         // If very close to a root, return the color associated with that root
         for(int i=0; i<polynomialZeros.size(); i++) {
-            if(std::abs(z-polynomialZeros[i]) < .01) {
-                float shade = ((iterations + .0f)/infinity) + .25f;
+            float dist = std::abs(z-polynomialZeros[i]);
+
+            if(dist < .01) {
+                // distAdjust should be 0 for dist = 0 and 1 for dist = .01
+                // It should also make the images look nice and smooth
+                float distAdjust = (float) (sqrt(dist)*10);
+                float shade = ((iterations + distAdjust)/infinity) + .05f;
                 shade = std::min(std::max(shade, 0.0f), 1.0f);
 
                 sf::Color base = ROOT_COLORS[i];
