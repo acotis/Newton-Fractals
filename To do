@@ -1,8 +1,8 @@
-Last commit: Make buttons implement drawable.
+Next commit: Create ClickablePanel class (display multiple buttons on custom-color bg)
+    and move "Draw Random" and "Save" buttons there (switch their colors too).
 
 Tasks for sidebar branch:
-    Next commit: Create ClickablePanel class (display multiple buttons on custom-color bg)
-        and move "Draw Random" and "Save" buttons there (switch their colors too).
+    Next commit: Fix text on buttons (again).
     Next commit: Move root-count and colors to a new FractalSettings class.
     Next commit: Make a root-count picker (maybe a slider?).
     Next commit: Add buttons for switching from one resolution to another.

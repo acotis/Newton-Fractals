@@ -25,16 +25,11 @@ Button::Button(sf::Color _color, std::string _label, std::function<void(void)> _
     textColor.b *= .1;
 
     // sf components
-    setAbsoluteBounds(sf::IntRect(10, 10, 100, 100));
-
     sf::Font *font = new sf::Font(); // Must create font on the heap so it isn't deleted when the constructor finishes
     font->loadFromFile("Resources/DejaVuSans.ttf");
-    text = sf::Text(label, *font, 24);
-    sf::FloatRect textBounds = text.getGlobalBounds();
-    text.setOrigin(textBounds.width/2, textBounds.height/2);
-    text.setPosition(absoluteBounds.left + absoluteBounds.width/2, absoluteBounds.top + absoluteBounds.height/2 - 5); // Slightly non-general scaling
-    //text.scale(sf::Vector2f(.8f, .8f));
-    text.setColor(textColor);
+    text = sf::Text(label, *font, 18);
+
+    setAbsoluteBounds(sf::IntRect(10, 10, 100, 100));
 }
 
 
@@ -53,16 +48,18 @@ bool Button::handleClickAt(float x, float y) {
 }
 
 void Button::setAbsoluteBounds(sf::IntRect _absoluteBounds) {
-    int dx = _absoluteBounds.left - absoluteBounds.left;
-    int dy = _absoluteBounds.top - absoluteBounds.top;
-
     absoluteBounds = _absoluteBounds;
 
+    // Re-set box to use new bounds
     box.setSize(sf::Vector2f(absoluteBounds.width-10, absoluteBounds.height-10));
     box.setPosition(absoluteBounds.left + 5, absoluteBounds.top + 5);
     box.setFillColor(color);
     box.setOutlineThickness(5);
     box.setOutlineColor(outlineColor);
 
-    text.move(dx, dy);
+    // Re-fit text to box
+    sf::FloatRect textBounds = text.getGlobalBounds();
+    text.setOrigin(textBounds.width/2, textBounds.height/2);
+    text.setPosition(absoluteBounds.left + absoluteBounds.width/2, absoluteBounds.top + absoluteBounds.height/2 - 5); // Slightly non-general scaling
+    text.setColor(textColor);
 }

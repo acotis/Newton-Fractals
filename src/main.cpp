@@ -41,8 +41,8 @@ int main() {
 
     Button *drawRandomButton = new Button(sf::Color::Green, "Draw Random", std::bind(&FractalCanvas::drawNewFractal, &canvas));
     Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
-    buttonPanel.addClickable(drawRandomButton, sf::IntRect(50, 25, 100, 40));
-    buttonPanel.addClickable(saveToPNGButton, sf::IntRect(50, 85, 100, 40));
+    buttonPanel.addClickable(drawRandomButton, sf::IntRect(25, 25, 150, 40));
+    buttonPanel.addClickable(saveToPNGButton, sf::IntRect(25, 85, 150, 40));
 
     // Initial fractal
     canvas.drawNewFractal();
