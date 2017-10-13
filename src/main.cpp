@@ -35,14 +35,17 @@ int main() {
     FractalCanvas canvas(FractalConstants::IMG_WIDTH, FractalConstants::IMG_HEIGHT, FractalConstants::DISPLAY_SHRINK);
 
     // Controls
-    ClickablePanel buttonPanel(
-            sf::Color(10, 10, 0),
-            sf::IntRect(FractalConstants::DISPLAY_WIDTH, 100, 200, 150));
+    ClickablePanel controlPanel(
+            sf::Color(180, 200, 200),
+            sf::IntRect(FractalConstants::DISPLAY_WIDTH, 0, 200, FractalConstants::DISPLAY_HEIGHT));
 
+    ClickablePanel *buttonPanel = new ClickablePanel(sf::Color(120, 140, 140));
     Button *drawRandomButton = new Button(sf::Color::Green, "Draw Random", std::bind(&FractalCanvas::drawNewFractal, &canvas));
     Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
-    buttonPanel.addClickable(drawRandomButton, sf::IntRect(25, 25, 150, 40));
-    buttonPanel.addClickable(saveToPNGButton, sf::IntRect(25, 85, 150, 40));
+    buttonPanel->addClickable(drawRandomButton, sf::IntRect(15, 15, 140, 40));
+    buttonPanel->addClickable(saveToPNGButton, sf::IntRect(15, 70, 140, 40));
+
+    controlPanel.addClickable(buttonPanel, sf::IntRect(15, 15, 170, 125));
 
     // Initial fractal
     canvas.drawNewFractal();
@@ -56,7 +59,7 @@ int main() {
 
             // Pass clicks onto the buttons
             if(nextEvent.type == sf::Event::MouseButtonPressed) {
-                buttonPanel.handleClickAt(nextEvent.mouseButton.x, nextEvent.mouseButton.y);
+                controlPanel.handleClickAt(nextEvent.mouseButton.x, nextEvent.mouseButton.y);
             }
         }
 
@@ -64,7 +67,7 @@ int main() {
         //std::cout << "Drawing image and buttons" << std::endl;
         canvas.drawSelf(window);
 
-        window.draw(buttonPanel);
+        window.draw(controlPanel);
 
         window.display();
     }

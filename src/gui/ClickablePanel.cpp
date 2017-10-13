@@ -11,7 +11,8 @@ ClickablePanel::ClickablePanel(sf::Color _color, sf::IntRect _absoluteBounds) {
 }
 
 ClickablePanel::ClickablePanel(sf::Color _color) {
-    ClickablePanel(_color, sf::IntRect(10, 10, 100, 100));
+    color = _color;
+    setAbsoluteBounds(sf::IntRect(10, 10, 100, 100));
 }
 
 
