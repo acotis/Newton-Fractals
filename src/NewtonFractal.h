@@ -14,13 +14,18 @@ class NewtonFractal {
     std::vector<Complex> polynomialZeros;
     std::vector<Complex> derivativeTerms;   // Element N is x^N term (i.e. 0th element is constant term)
 
-    TransformFun transform;
-    ColorFun colorFun;
+    //TransformFun transform;
+    //ColorFun colorFun;
     int infinity;
 
-    void computeDerivative();
+    // Polynomial functionality
+    void computeDerivative(); // Used in constructor
     Complex evaluatePolynomial(Complex input);
     Complex evaluateDerivative(Complex input);
+
+    // Fractal functionality
+    Complex* transform(Complex z); // z -> [z - P(z)/P'(z)]
+    MaybeColor* colorFun(Complex z, int iteration);
 
 public:
     NewtonFractal();

@@ -1,7 +1,10 @@
-+ Add buttons for switching from one resolution to another
-+ Make an on-screen color picker
-+ Make the zeros drag-able
-+ Make it be able to take the coefficients of the terms of the polynomial, not just the roots
+
+Next commit: Turn colorFun and and transformFun from function variables into methods
+Next commit: Add buttons for switching from one resolution to another
+Next up: Implement save-fractal and load-fractal functionality.
+Next up: Make an on-screen color picker
+Next up: Make the zeros drag-able?
+Next commit: Make it be able to take the coefficients of the terms of the polynomial, not just the roots
     (Probably pull polynomial functionality out into a class with methods:
         Polynomial(vector<Complex>) // Construct from zeros
         Polynomial(vector<pair<Complex,int>) // Construct from terms
@@ -10,3 +13,4 @@
 
 Bugs:
     Program sometimes segfaults (?) on close.
+    Smoothness isn't entirely smooth.
