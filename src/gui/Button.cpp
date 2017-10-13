@@ -7,9 +7,8 @@
 #include "Button.h"
 
 
-Button::Button(sf::IntRect _bounds, sf::Color _color, std::string _label, std::function<void(void)> _whenClicked) {
+Button::Button(sf::Color _color, std::string _label, std::function<void(void)> _whenClicked) {
     // Primary attributes
-    bounds = _bounds;
     color = _color;
     label = _label;
     whenClicked = _whenClicked;
@@ -26,18 +25,14 @@ Button::Button(sf::IntRect _bounds, sf::Color _color, std::string _label, std::f
     textColor.b *= .1;
 
     // sf components
-    box.setSize(sf::Vector2f(bounds.width-10, bounds.height-10));
-    box.setPosition(bounds.left + 5, bounds.top + 5);
-    box.setFillColor(color);
-    box.setOutlineThickness(5);
-    box.setOutlineColor(outlineColor);
+    setAbsoluteBounds(sf::IntRect(10, 10, 100, 100));
 
     sf::Font *font = new sf::Font(); // Must create font on the heap so it isn't deleted when the constructor finishes
     font->loadFromFile("Resources/DejaVuSans.ttf");
     text = sf::Text(label, *font, 24);
     sf::FloatRect textBounds = text.getGlobalBounds();
     text.setOrigin(textBounds.width/2, textBounds.height/2);
-    text.setPosition(bounds.left + bounds.width/2, bounds.top + bounds.height/2 - 5); // Slightly non-general scaling
+    text.setPosition(absoluteBounds.left + absoluteBounds.width/2, absoluteBounds.top + absoluteBounds.height/2 - 5); // Slightly non-general scaling
     //text.scale(sf::Vector2f(.8f, .8f));
     text.setColor(textColor);
 }
@@ -49,10 +44,25 @@ void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 }
 
 bool Button::handleClickAt(float x, float y) {
-    if(bounds.contains((int) x, (int) y)) {
+    if(absoluteBounds.contains((int) x, (int) y)) {
         whenClicked();
         return true;
     } else {
         return false;
     }
+}
+
+void Button::setAbsoluteBounds(sf::IntRect _absoluteBounds) {
+    int dx = _absoluteBounds.left - absoluteBounds.left;
+    int dy = _absoluteBounds.top - absoluteBounds.top;
+
+    absoluteBounds = _absoluteBounds;
+
+    box.setSize(sf::Vector2f(absoluteBounds.width-10, absoluteBounds.height-10));
+    box.setPosition(absoluteBounds.left + 5, absoluteBounds.top + 5);
+    box.setFillColor(color);
+    box.setOutlineThickness(5);
+    box.setOutlineColor(outlineColor);
+
+    text.move(dx, dy);
 }

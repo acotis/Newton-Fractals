@@ -1,9 +1,14 @@
-Last commit: Fix the text on the buttons.
+Last commit: Make buttons implement drawable.
 
-Next commit: Make buttons implement drawable.
-Next commit: Add buttons for switching from one resolution to another.
-Next up: Implement save-fractal and load-fractal functionality.
-Next up: Make an on-screen color picker
+Tasks for sidebar branch:
+    Next commit: Create ClickablePanel class (display multiple buttons on custom-color bg)
+        and move "Draw Random" and "Save" buttons there (switch their colors too).
+    Next commit: Move root-count and colors to a new FractalSettings class.
+    Next commit: Make a root-count picker (maybe a slider?).
+    Next commit: Add buttons for switching from one resolution to another.
+    Next commit: Make an on-screen color picker?
+
+Next up: Implement save-settings and load-fractal functionality.
 Next up: Make the zeros drag-able?
 Next commit: Make it be able to take the coefficients of the terms of the polynomial, not just the roots
     (Probably pull polynomial functionality out into a class with methods:

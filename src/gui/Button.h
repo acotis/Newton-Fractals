@@ -11,10 +11,10 @@
 #include <functional>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include "Clickable.h"
 
-class Button : public sf::Drawable {
+class Button : public Clickable {
     // Primary attributes
-    sf::IntRect bounds;
     sf::Color color;
     std::string label;
     std::function<void(void)> whenClicked;
@@ -28,9 +28,11 @@ class Button : public sf::Drawable {
     sf::Text text;
 
 public:
-    Button(sf::IntRect _bounds, sf::Color _color, std::string _label, std::function<void(void)> _whenClicked);
+    Button(sf::Color _color, std::string _label, std::function<void(void)> _whenClicked);
     void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     bool handleClickAt(float x, float y);
+
+    void setAbsoluteBounds(sf::IntRect _absoluteBounds);
 };
 
 

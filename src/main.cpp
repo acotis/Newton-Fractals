@@ -19,28 +19,30 @@
 #include <png++/png.hpp>
 
 #include "Constants.h"
-#include "Button.h"
-#include "FractalCanvas.h"
+#include "gui/Button.h"
+#include "gui/FractalCanvas.h"
+#include "gui/ClickablePanel.h"
 
 
 int main() {
     srand(time(NULL));
 
     // Window and event
-    sf::RenderWindow window(sf::VideoMode(FractalConstants::DISPLAY_WIDTH, FractalConstants::DISPLAY_HEIGHT + 100), "Newton fractal");
+    sf::RenderWindow window(sf::VideoMode(FractalConstants::DISPLAY_WIDTH + 200, FractalConstants::DISPLAY_HEIGHT),
+                            "Newton fractal");
     sf::Event nextEvent;
 
     FractalCanvas canvas(FractalConstants::IMG_WIDTH, FractalConstants::IMG_HEIGHT, FractalConstants::DISPLAY_SHRINK);
 
     // Controls
-    Button buttons[] = {
-            Button(sf::IntRect(250, 480, 140, 40), sf::Color::Cyan, "New",
-                    std::bind(&FractalCanvas::drawNewFractal, &canvas)),
+    ClickablePanel buttonPanel(
+            sf::Color(10, 10, 0),
+            sf::IntRect(FractalConstants::DISPLAY_WIDTH, 100, 200, 150));
 
-            Button(sf::IntRect(430, 480, 140, 40), sf::Color::Green, "Save",
-                    std::bind(&FractalCanvas::saveToPNG, &canvas)),
-    };
-    int buttonCount = 2;
+    Button *drawRandomButton = new Button(sf::Color::Green, "Draw Random", std::bind(&FractalCanvas::drawNewFractal, &canvas));
+    Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
+    buttonPanel.addClickable(drawRandomButton, sf::IntRect(50, 25, 100, 40));
+    buttonPanel.addClickable(saveToPNGButton, sf::IntRect(50, 85, 100, 40));
 
     // Initial fractal
     canvas.drawNewFractal();
@@ -54,11 +56,7 @@ int main() {
 
             // Pass clicks onto the buttons
             if(nextEvent.type == sf::Event::MouseButtonPressed) {
-                for(int i=0; i<buttonCount; i++) {
-                    if(buttons[i].handleClickAt(nextEvent.mouseButton.x, nextEvent.mouseButton.y)) {
-                        break;
-                    }
-                }
+                buttonPanel.handleClickAt(nextEvent.mouseButton.x, nextEvent.mouseButton.y);
             }
         }
 
@@ -66,9 +64,7 @@ int main() {
         //std::cout << "Drawing image and buttons" << std::endl;
         canvas.drawSelf(window);
 
-        for(int i=0; i<buttonCount; i++) {
-            window.draw(buttons[i]);
-        }
+        window.draw(buttonPanel);
 
         window.display();
     }

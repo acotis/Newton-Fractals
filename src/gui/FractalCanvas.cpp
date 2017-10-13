@@ -3,7 +3,7 @@
 //
 
 #include "FractalCanvas.h"
-#include "Constants.h"
+#include "../Constants.h"
 #include <SFML/Graphics.hpp>
 #include <png++/rgb_pixel.hpp>
 #include <png++/image.hpp>

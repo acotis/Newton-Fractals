@@ -10,7 +10,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include "NewtonFractal.h"
+#include "../NewtonFractal.h"
 
 class FractalCanvas {
     sf::Uint8 *pixels;
