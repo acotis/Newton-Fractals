@@ -67,7 +67,7 @@ int main() {
         canvas.drawSelf(window);
 
         for(int i=0; i<buttonCount; i++) {
-            buttons[i].drawSelf(window);
+            window.draw(buttons[i]);
         }
 
         window.display();

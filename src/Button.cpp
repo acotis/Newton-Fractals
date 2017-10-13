@@ -43,9 +43,9 @@ Button::Button(sf::IntRect _bounds, sf::Color _color, std::string _label, std::f
 }
 
 
-void Button::drawSelf(sf::RenderTarget &target) {
-    target.draw(box);
-    target.draw(text);
+void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.draw(box, states);
+    target.draw(text, states);
 }
 
 bool Button::handleClickAt(float x, float y) {

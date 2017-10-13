@@ -1,6 +1,6 @@
-Last commit: Turn colorFun and and transformFun from function variables into methods
+Last commit: Fix the text on the buttons.
 
-Next commit: Fix the text on the buttons.
+Next commit: Make buttons implement drawable.
 Next commit: Add buttons for switching from one resolution to another.
 Next up: Implement save-fractal and load-fractal functionality.
 Next up: Make an on-screen color picker

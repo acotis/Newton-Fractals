@@ -12,7 +12,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Text.hpp>
 
-class Button {
+class Button : public sf::Drawable {
     // Primary attributes
     sf::IntRect bounds;
     sf::Color color;
@@ -29,7 +29,7 @@ class Button {
 
 public:
     Button(sf::IntRect _bounds, sf::Color _color, std::string _label, std::function<void(void)> _whenClicked);
-    void drawSelf(sf::RenderTarget &target);
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const;
     bool handleClickAt(float x, float y);
 };
 
