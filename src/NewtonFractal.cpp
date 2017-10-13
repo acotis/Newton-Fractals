@@ -20,8 +20,7 @@ const sf::Color NewtonFractal::ROOT_COLORS[] = {
         sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
         sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
 
-
-//        sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
+//    sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
 //    sf::Color::Yellow, sf::Color::Magenta, sf::Color::Cyan,
 //    sf::Color::White, sf::Color(255, 128, 0)
 };
@@ -91,8 +90,6 @@ Complex NewtonFractal::evaluateDerivative(Complex input) {
 /* Internal fractal functionality */
 
 Complex* NewtonFractal::transform(Complex z) {
-    //Complex num = z*z*z - 1.0f;
-    //Complex den = 3.0f*z*z;
     Complex num = evaluatePolynomial(z);
     Complex den = evaluateDerivative(z);
     return new Complex(z - num/den);

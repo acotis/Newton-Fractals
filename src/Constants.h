@@ -15,7 +15,7 @@ namespace FractalConstants {
     const unsigned int DISPLAY_WIDTH = 800; // Size of the image shown on the screen
     const unsigned int DISPLAY_HEIGHT = (unsigned int) (DISPLAY_WIDTH/ASPECT_RATIO);
 
-    const float DISPLAY_SHRINK = (DISPLAY_WIDTH+.0f)/IMG_WIDTH;
+    const float DISPLAY_SHRINK = (DISPLAY_WIDTH+.0f)/IMG_WIDTH; // Ratio of display size to image size
 
     const float VIEW_WIDTH = 3.2; // Size of the visible portion of the complex plane
     const float VIEW_HEIGHT = VIEW_WIDTH/ASPECT_RATIO;

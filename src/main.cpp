@@ -34,10 +34,10 @@ int main() {
 
     // Controls
     Button buttons[] = {
-            Button(sf::IntRect(250, 480, 140, 40), sf::Color::Cyan, "New fractal",
+            Button(sf::IntRect(250, 480, 140, 40), sf::Color::Cyan, "New",
                     std::bind(&FractalCanvas::drawNewFractal, &canvas)),
 
-            Button(sf::IntRect(430, 480, 140, 40), sf::Color::Green, "Save fractal",
+            Button(sf::IntRect(430, 480, 140, 40), sf::Color::Green, "Save",
                     std::bind(&FractalCanvas::saveToPNG, &canvas)),
     };
     int buttonCount = 2;

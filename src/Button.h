@@ -21,6 +21,10 @@ class Button {
 
     // Secondary attributes
     sf::Color outlineColor;
+    sf::Color textColor;
+
+    // sf components
+    sf::RectangleShape box;
     sf::Text text;
 
 public:

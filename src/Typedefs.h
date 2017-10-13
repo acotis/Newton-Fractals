@@ -11,8 +11,6 @@
 
 typedef std::pair<sf::Color,bool> MaybeColor;
 typedef std::complex<float> Complex;
-typedef std::function<Complex*(Complex)> TransformFun;
-typedef std::function<MaybeColor*(Complex, int)> ColorFun;
 
 class NewtonFractal;
 
