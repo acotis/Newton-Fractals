@@ -11,11 +11,10 @@
 class NewtonFractal {
     static const sf::Color ROOT_COLORS[];
 
+
     std::vector<Complex> polynomialZeros;
     std::vector<Complex> derivativeTerms;   // Element N is x^N term (i.e. 0th element is constant term)
 
-    //TransformFun transform;
-    //ColorFun colorFun;
     int infinity;
 
     // Polynomial functionality

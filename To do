@@ -1,11 +1,13 @@
-Last commit: Fix text on buttons (again).
+Last commit: Create hierarchy in control panel.
 
 Tasks for sidebar branch:
-    Next commit: Create hierarchy in control panel.
-    Next commit: Move root-count and colors to a new FractalSettings class.
-    Next commit: Make a root-count picker (maybe a slider?).
-    Next commit: Add buttons for switching from one resolution to another.
+    Next commit: Create nonfunctional control panel to change resolution
+    Next commit: Make ClickablePanels resize to accommodate components automatically?
+        (Also implement a setMargin() method)
+    Next commit: Make resolution button functional (add setImageSize to FractalCanvas class)
+    Next commit: Move root-count and colors to a FractalSettings
     Next commit: Make an on-screen color picker?
+    Next commit: Make a root-count picker (maybe a slider?).
 
 Next up: Implement save-settings and load-fractal functionality.
 Next up: Make the zeros drag-able?

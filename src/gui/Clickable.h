@@ -17,7 +17,6 @@ public:
     virtual sf::IntRect getAbsoluteBounds() {
         return absoluteBounds;
     };
-
     virtual void setAbsoluteBounds(sf::IntRect _absoluteBounds) {
         absoluteBounds = _absoluteBounds;
     }

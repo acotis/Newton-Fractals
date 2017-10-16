@@ -14,7 +14,7 @@
 #include "Clickable.h"
 
 class Button : public Clickable {
-    // Primary attributes
+    // Primary attributes (includes absoluteBounds)
     sf::Color color;
     std::string label;
     std::function<void(void)> whenClicked;
@@ -24,8 +24,13 @@ class Button : public Clickable {
     sf::Color textColor;
 
     // sf components
+    sf::Font *font;
     sf::RectangleShape box;
     sf::Text text;
+
+    // Reload attributs
+    void recomputeColors();
+    void remakeSFComponents();
 
 public:
     Button(sf::Color _color, std::string _label, std::function<void(void)> _whenClicked);
@@ -33,6 +38,8 @@ public:
     bool handleClickAt(float x, float y);
 
     void setAbsoluteBounds(sf::IntRect _absoluteBounds);
+    void setColor(sf::Color _color);
+    void setLabel(std::string _text);
 };
 
 

@@ -22,14 +22,16 @@
 #include "gui/Button.h"
 #include "gui/FractalCanvas.h"
 #include "gui/ClickablePanel.h"
+#include "gui/ResolutionPicker.h"
 
 
 int main() {
     srand(time(NULL));
 
     // Window and event
-    sf::RenderWindow window(sf::VideoMode(FractalConstants::DISPLAY_WIDTH + 200, FractalConstants::DISPLAY_HEIGHT),
-                            "Newton fractal");
+    sf::RenderWindow window(
+            sf::VideoMode(FractalConstants::DISPLAY_WIDTH + 200, FractalConstants::DISPLAY_HEIGHT),
+            "Newton fractal");
     sf::Event nextEvent;
 
     FractalCanvas canvas(FractalConstants::IMG_WIDTH, FractalConstants::IMG_HEIGHT, FractalConstants::DISPLAY_SHRINK);
@@ -39,13 +41,22 @@ int main() {
             sf::Color(180, 200, 200),
             sf::IntRect(FractalConstants::DISPLAY_WIDTH, 0, 200, FractalConstants::DISPLAY_HEIGHT));
 
+    // Draw and save buttons
     ClickablePanel *buttonPanel = new ClickablePanel(sf::Color(120, 140, 140));
     Button *drawRandomButton = new Button(sf::Color::Green, "Draw Random", std::bind(&FractalCanvas::drawNewFractal, &canvas));
     Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
     buttonPanel->addClickable(drawRandomButton, sf::IntRect(15, 15, 140, 40));
     buttonPanel->addClickable(saveToPNGButton, sf::IntRect(15, 70, 140, 40));
 
-    controlPanel.addClickable(buttonPanel, sf::IntRect(15, 15, 170, 125));
+    // Resolution picker
+    ResolutionPicker *resolutionPicker = new ResolutionPicker(sf::Color(120, 140, 140));
+    int resPickWidth = resolutionPicker->getAbsoluteBounds().width;
+    int resPickHeight = resolutionPicker->getAbsoluteBounds().height;
+
+    // Add stuff to control panel
+    controlPanel.addClickable(buttonPanel, sf::IntRect(15, 155, 170, 125));
+    controlPanel.addClickable(resolutionPicker, sf::IntRect(15, 15, resPickWidth, resPickHeight));
+
 
     // Initial fractal
     canvas.drawNewFractal();
@@ -64,11 +75,8 @@ int main() {
         }
 
         // Draw the image and buttons
-        //std::cout << "Drawing image and buttons" << std::endl;
         canvas.drawSelf(window);
-
         window.draw(controlPanel);
-
         window.display();
     }
 
