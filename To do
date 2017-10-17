@@ -1,13 +1,16 @@
-Last commit: Create hierarchy in control panel.
+Last commit: Create nonfunctional control panel to change resolution
 
 Tasks for sidebar branch:
-    Next commit: Create nonfunctional control panel to change resolution
+    Next commit: Separate controls UI into generation panel, resolution panel, and save panel.
     Next commit: Make ClickablePanels resize to accommodate components automatically?
         (Also implement a setMargin() method)
     Next commit: Make resolution button functional (add setImageSize to FractalCanvas class)
     Next commit: Move root-count and colors to a FractalSettings
     Next commit: Make an on-screen color picker?
     Next commit: Make a root-count picker (maybe a slider?).
+
+    Eventual commit: Separate GUI-generation into two new files: a constants file and a control-panel generation file.
+
 
 Next up: Implement save-settings and load-fractal functionality.
 Next up: Make the zeros drag-able?
@@ -20,4 +23,5 @@ Next commit: Make it be able to take the coefficients of the terms of the polyno
 
 Bugs:
     Program sometimes segfaults (?) on close.
-    Smoothness isn't entirely smooth.
+    Fractal smoothness isn't entirely smooth.
+    Some button-texts show up fuzzy.

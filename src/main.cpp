@@ -41,21 +41,25 @@ int main() {
             sf::Color(180, 200, 200),
             sf::IntRect(FractalConstants::DISPLAY_WIDTH, 0, 200, FractalConstants::DISPLAY_HEIGHT));
 
-    // Draw and save buttons
-    ClickablePanel *buttonPanel = new ClickablePanel(sf::Color(120, 140, 140));
-    Button *drawRandomButton = new Button(sf::Color::Green, "Draw Random", std::bind(&FractalCanvas::drawNewFractal, &canvas));
-    Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
-    buttonPanel->addClickable(drawRandomButton, sf::IntRect(15, 15, 140, 40));
-    buttonPanel->addClickable(saveToPNGButton, sf::IntRect(15, 70, 140, 40));
+    // Generate panel
+    ClickablePanel *generatePanel = new ClickablePanel(sf::Color(120, 140, 140));
+    Button *generateButton = new Button(sf::Color::Green, "Generate", std::bind(&FractalCanvas::drawNewFractal, &canvas));
+    generatePanel->addClickable(generateButton, sf::IntRect(15, 15, 140, 40));
 
-    // Resolution picker
+    // Resolution panel
     ResolutionPicker *resolutionPicker = new ResolutionPicker(sf::Color(120, 140, 140));
     int resPickWidth = resolutionPicker->getAbsoluteBounds().width;
     int resPickHeight = resolutionPicker->getAbsoluteBounds().height;
 
+    // Save panel
+    ClickablePanel *savePanel = new ClickablePanel(sf::Color(120, 140, 140));
+    Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
+    savePanel->addClickable(saveToPNGButton, sf::IntRect(15, 15, 140, 40));
+
     // Add stuff to control panel
-    controlPanel.addClickable(buttonPanel, sf::IntRect(15, 155, 170, 125));
-    controlPanel.addClickable(resolutionPicker, sf::IntRect(15, 15, resPickWidth, resPickHeight));
+    controlPanel.addClickable(generatePanel, sf::IntRect(15, 15, 170, 70));
+    controlPanel.addClickable(resolutionPicker, sf::IntRect(15, 100, resPickWidth, resPickHeight));
+    controlPanel.addClickable(savePanel, sf::IntRect(15, 100 + resPickHeight + 15, 170, 70));
 
 
     // Initial fractal
