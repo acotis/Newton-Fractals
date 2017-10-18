@@ -10,18 +10,28 @@
 #include <thread>
 
 
-FractalCanvas::FractalCanvas(int _width, int _height, float _shrink_factor) {
-    width = _width;
-    height = _height;
-    pixels = new sf::Uint8[width*height*4];
+FractalCanvas::FractalCanvas(int _width, int _height, float _display_shrink) {
+    img_width = _width;
+    img_height = _height;
+    pixels = nullptr;
+    setPixelCount(img_width*img_height);
 
-    shrink_factor = _shrink_factor;
+    display_shrink = _display_shrink;
     texture.setSmooth(true);
-    sprite.setScale(sf::Vector2f(shrink_factor, shrink_factor));
+    sprite.setScale(sf::Vector2f(display_shrink, display_shrink));
 }
 
 FractalCanvas::~FractalCanvas() {
     delete pixels;
+}
+
+
+void FractalCanvas::setPixelCount(long count) {
+    if(pixels != nullptr) {
+        delete pixels;
+    }
+    pixels = new sf::Uint8[count*4];
+
 }
 
 
@@ -30,8 +40,8 @@ void FractalCanvas::drawFractal(NewtonFractal *_fractal) {
 
     float xstart = -FractalConstants::VIEW_WIDTH/2;
     float ystart = -FractalConstants::VIEW_HEIGHT/2;
-    float xStep = FractalConstants::VIEW_WIDTH / width;
-    float yStep = FractalConstants::VIEW_HEIGHT / height;
+    float xStep = FractalConstants::VIEW_WIDTH / img_width;
+    float yStep = FractalConstants::VIEW_HEIGHT / img_height;
 
     // Loop and draw
     for(int yPix=0; yPix<FractalConstants::IMG_HEIGHT; yPix++) {
@@ -65,22 +75,24 @@ void FractalCanvas::drawNewFractal() {
         while(!goFlag) {
             std::this_thread::__sleep_for(std::chrono::duration<int>(0), std::chrono::duration<int>(10000)); // 10 ms
         }
-        stopFlag = false;
-        goFlag = false;
     }
+
+    stopFlag = false;
+    goFlag = false;
 
     drawThread = new std::thread(&FractalCanvas::drawFractal, this, new NewtonFractal);
 }
 
 
 void FractalCanvas::saveToPNG() {
-    png::image<png::rgb_pixel> image(width, height);
+    png::image<png::rgb_pixel> image(img_width, img_height);
 
     // Copy internal pixels onto the image
 
-    for(int y=0; y<height; y++) {
-        for(int x=0; x<width; x++) {
-            int ref = (y * width + x) * 4;
+    for(int y=0; y<img_height; y++) {
+        for(int x=0; x<img_width; x++) {
+            // (Why can't this just be image.create(img_width, img_height, pixels)?)
+            int ref = (y * img_width + x) * 4;
             image[y][x] = png::rgb_pixel(pixels[ref], pixels[ref+1], pixels[ref+2]);
         }
     }
@@ -111,7 +123,7 @@ void FractalCanvas::saveToPNG() {
 
 
 void FractalCanvas::drawSelf(sf::RenderTarget &target) {
-    image.create(width, height, pixels);
+    image.create(img_width, img_height, pixels);
     texture.loadFromImage(image);
     sprite.setTexture(texture);
 

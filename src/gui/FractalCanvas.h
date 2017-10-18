@@ -20,27 +20,25 @@ class FractalCanvas {
     sf::Texture texture;
     sf::Sprite sprite;
 
-    // These dimensions refer to the INTERNAL PIXEL COUNT.
-    // This is also the size that the image will be saved at.
-    int width;
-    int height;
-
-    // Shrink factor refers to how much smaller the display is than the image.
-    // (Use values > 1 for pixelated display)
-    float shrink_factor;
+    // Dimensions
+    int img_width;  // Dimensions of internal image
+    int img_height;
+    float display_shrink;
 
     // Thread management
     std::thread *drawThread = nullptr;
     bool stopFlag = false; // Set to indicate that the current draw thread
-    bool goFlag = true;    // Set to indicate that any previous draw thread has stopped and a new one can start
+    bool goFlag = false;    // Set to indicate that any previous draw thread has stopped and a new one can start
 
     // This method is private because I want it to ALWAYS happen in a new thread
     // and therefore to just kill its own thread when it's done.
     // Obviously code like that can't go in a public method.
     void drawFractal(NewtonFractal *_fractal);
 
+    void setPixelCount(long count);
+
 public:
-    FractalCanvas(int _width, int _height, float _shrink_factor);
+    FractalCanvas(int _width, int _height, float _display_shrink);
     ~FractalCanvas();
 
     void drawNewFractal();

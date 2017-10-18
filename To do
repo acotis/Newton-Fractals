@@ -1,11 +1,10 @@
-Last commit: Separate controls UI into generation panel, resolution panel, and save panel.
+Last commit: Make re-draws stop old draws.
 
 Tasks for sidebar branch:
-    Next commit: Make re-draws stop old draws.
-
-    (Next up: Make sure the threads are actually stopping)
-
     Next commit: Make resolution button functional (add setImageSize to FractalCanvas class)
+
+    (Next up: Change FractalCanvas.saveToPNG() to use image.create(width, height, pixels)?)
+
     Next commit: Make ClickablePanels resize to accommodate components automatically?
         (Also implement a setMargin() method)
     Next commit: Move root-count and colors to a FractalSettings
