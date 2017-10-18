@@ -35,23 +35,21 @@ void FractalCanvas::setPixelCount(long count) {
 }
 
 
-void FractalCanvas::drawFractal(NewtonFractal *_fractal) {
-    NewtonFractal *fractal = (NewtonFractal*) _fractal;
-
+void FractalCanvas::drawFractal() {
     float xstart = -FractalConstants::VIEW_WIDTH/2;
     float ystart = -FractalConstants::VIEW_HEIGHT/2;
     float xStep = FractalConstants::VIEW_WIDTH / img_width;
     float yStep = FractalConstants::VIEW_HEIGHT / img_height;
 
     // Loop and draw
-    for(int yPix=0; yPix<FractalConstants::IMG_HEIGHT; yPix++) {
-        for(int xPix=0; xPix<FractalConstants::IMG_WIDTH; xPix++) {
+    for(int yPix=0; yPix<img_height; yPix++) {
+        for(int xPix=0; xPix<img_width; xPix++) {
             float x = xstart + xPix * xStep;
             float y = ystart + yPix * yStep;
 
             sf::Color color = fractal->getColorForStartLocation(x, y);
 
-            int offset = (yPix*FractalConstants::IMG_WIDTH + xPix) * 4;
+            int offset = (yPix*img_width + xPix) * 4;
             pixels[offset] = color.r;
             pixels[offset + 1] = color.g;
             pixels[offset + 2] = color.b;
@@ -67,9 +65,7 @@ void FractalCanvas::drawFractal(NewtonFractal *_fractal) {
 }
 
 
-void FractalCanvas::drawNewFractal() {
-    // Begin a new thread for drawing the fractal
-
+void FractalCanvas::killDrawThread() {
     if(drawThread != nullptr) {
         stopFlag = true;
         while(!goFlag) {
@@ -79,8 +75,28 @@ void FractalCanvas::drawNewFractal() {
 
     stopFlag = false;
     goFlag = false;
+}
 
-    drawThread = new std::thread(&FractalCanvas::drawFractal, this, new NewtonFractal);
+
+void FractalCanvas::redrawFractal(int _width, int _height, float _display_shrink) {
+    killDrawThread();
+
+    img_width = _width;
+    img_height = _height;
+    display_shrink = _display_shrink;
+    sprite.setScale(sf::Vector2f(display_shrink, display_shrink));
+    setPixelCount(img_width*img_height*4);
+
+    if(fractal == nullptr) return; // If there's no fractal to draw, don't try to draw it
+
+    drawThread = new std::thread(&FractalCanvas::drawFractal, this);
+}
+
+
+void FractalCanvas::drawNewFractal() {
+    killDrawThread();
+    fractal = new NewtonFractal;
+    drawThread = new std::thread(&FractalCanvas::drawFractal, this);
 }
 
 

@@ -9,15 +9,25 @@
 namespace FractalConstants {
     const float ASPECT_RATIO = 1.77777f; // 16:9
 
-    const unsigned int IMG_WIDTH = 1600; // Size of the pixel array in memory
-    const unsigned int IMG_HEIGHT = (unsigned int) (IMG_WIDTH/ASPECT_RATIO);
+    // Sizes of the image in memory (LQ, HQ, HD, 4k)
+    const unsigned int IMG_WIDTHS[] = {160, 720, 1920, 4000};
+    const unsigned int IMG_HEIGHTS[] = {(unsigned int) (IMG_WIDTHS[0]/ASPECT_RATIO),
+                                        (unsigned int) (IMG_WIDTHS[1]/ASPECT_RATIO),
+                                        (unsigned int) (IMG_WIDTHS[2]/ASPECT_RATIO),
+                                        (unsigned int) (IMG_WIDTHS[3]/ASPECT_RATIO)};
 
-    const unsigned int DISPLAY_WIDTH = 800; // Size of the image shown on the screen
+    // Size of the image shown on the screen
+    const unsigned int DISPLAY_WIDTH = 800;
     const unsigned int DISPLAY_HEIGHT = (unsigned int) (DISPLAY_WIDTH/ASPECT_RATIO);
 
-    const float DISPLAY_SHRINK = (DISPLAY_WIDTH+.0f)/IMG_WIDTH; // Ratio of display size to image size
+    // Ratios of display size to image size (LQ, HQ, HD, 4k)
+    const float DISPLAY_SHRINKS[] = {(DISPLAY_WIDTH+.0f)/IMG_WIDTHS[0],
+                                     (DISPLAY_WIDTH+.0f)/IMG_WIDTHS[1],
+                                     (DISPLAY_WIDTH+.0f)/IMG_WIDTHS[2],
+                                     (DISPLAY_WIDTH+.0f)/IMG_WIDTHS[3]};
 
-    const float VIEW_WIDTH = 3.2; // Size of the visible portion of the complex plane
+    // Size of the visible portion of the complex plane
+    const float VIEW_WIDTH = 3.2;
     const float VIEW_HEIGHT = VIEW_WIDTH/ASPECT_RATIO;
 }
 

@@ -14,6 +14,9 @@
 #include "../NewtonFractal.h"
 
 class FractalCanvas {
+    // Current Fractal
+    NewtonFractal *fractal;
+
     // Drawing components
     sf::Uint8 *pixels;
     sf::Image image;
@@ -30,10 +33,9 @@ class FractalCanvas {
     bool stopFlag = false; // Set to indicate that the current draw thread
     bool goFlag = false;    // Set to indicate that any previous draw thread has stopped and a new one can start
 
-    // This method is private because I want it to ALWAYS happen in a new thread
-    // and therefore to just kill its own thread when it's done.
-    // Obviously code like that can't go in a public method.
-    void drawFractal(NewtonFractal *_fractal);
+    // This method is private because FractalCanvas creates and manages a separate thread for it
+    void drawFractal();
+    void killDrawThread();
 
     void setPixelCount(long count);
 
@@ -42,6 +44,7 @@ public:
     ~FractalCanvas();
 
     void drawNewFractal();
+    void redrawFractal(int _width, int _height, float _display_shrink);
     void saveToPNG();
 
     void drawSelf(sf::RenderTarget &target);

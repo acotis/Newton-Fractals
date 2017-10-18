@@ -25,6 +25,18 @@
 #include "gui/ResolutionPicker.h"
 
 
+FractalCanvas fractalCanvas(FractalConstants::IMG_WIDTHS[1], FractalConstants::IMG_HEIGHTS[1], FractalConstants::DISPLAY_SHRINKS[1]);
+
+namespace ControlCenter {
+    void setFractalCanvasResolution(int resolutionID) {
+        fractalCanvas.redrawFractal(
+                FractalConstants::IMG_WIDTHS[resolutionID],
+                FractalConstants::IMG_HEIGHTS[resolutionID],
+                FractalConstants::DISPLAY_SHRINKS[resolutionID]);
+    }
+}
+
+
 int main() {
     srand(time(NULL));
 
@@ -34,7 +46,7 @@ int main() {
             "Newton fractal");
     sf::Event nextEvent;
 
-    FractalCanvas canvas(FractalConstants::IMG_WIDTH, FractalConstants::IMG_HEIGHT, FractalConstants::DISPLAY_SHRINK);
+    std::cout << "Creating controls..." << std::endl;
 
     // Controls
     ClickablePanel controlPanel(
@@ -43,7 +55,7 @@ int main() {
 
     // Generate panel
     ClickablePanel *generatePanel = new ClickablePanel(sf::Color(120, 140, 140));
-    Button *generateButton = new Button(sf::Color::Green, "Generate", std::bind(&FractalCanvas::drawNewFractal, &canvas));
+    Button *generateButton = new Button(sf::Color::Green, "Generate", std::bind(&FractalCanvas::drawNewFractal, &fractalCanvas));
     generatePanel->addClickable(generateButton, sf::IntRect(15, 15, 140, 40));
 
     // Resolution panel
@@ -53,17 +65,19 @@ int main() {
 
     // Save panel
     ClickablePanel *savePanel = new ClickablePanel(sf::Color(120, 140, 140));
-    Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &canvas));
+    Button *saveToPNGButton = new Button(sf::Color::Cyan, "Save to PNG", std::bind(&FractalCanvas::saveToPNG, &fractalCanvas));
     savePanel->addClickable(saveToPNGButton, sf::IntRect(15, 15, 140, 40));
+
 
     // Add stuff to control panel
     controlPanel.addClickable(generatePanel, sf::IntRect(15, 15, 170, 70));
     controlPanel.addClickable(resolutionPicker, sf::IntRect(15, 100, resPickWidth, resPickHeight));
     controlPanel.addClickable(savePanel, sf::IntRect(15, 100 + resPickHeight + 15, 170, 70));
 
+    std::cout << "Drawing initial fractal..." << std::endl;
 
     // Initial fractal
-    canvas.drawNewFractal();
+    fractalCanvas.drawNewFractal();
 
     while(window.isOpen()) {
         while(window.pollEvent(nextEvent)) {
@@ -79,7 +93,7 @@ int main() {
         }
 
         // Draw the image and buttons
-        canvas.drawSelf(window);
+        fractalCanvas.drawSelf(window);
         window.draw(controlPanel);
         window.display();
     }

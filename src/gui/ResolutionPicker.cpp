@@ -2,7 +2,9 @@
 // Created by evan on 10/13/17.
 //
 
+#include <iostream>
 #include "ResolutionPicker.h"
+#include "ControlCenter.h"
 
 
 const int ResolutionPicker::NBUTTONS = 4;
@@ -43,7 +45,7 @@ void ResolutionPicker::constructButtons() {
     buttons[2]->setLabel("HD");
     buttons[3]->setLabel("4k");
 
-    selectButton(0);
+    selectButton(1);
 }
 
 void ResolutionPicker::selectButton(int nbutton) {
@@ -51,4 +53,6 @@ void ResolutionPicker::selectButton(int nbutton) {
         buttons[i]->setColor(UNSELECT_COLOR);
     }
     buttons[nbutton]->setColor(SELECT_COLOR);
+    
+    ControlCenter::setFractalCanvasResolution(nbutton);
 }
