@@ -47,14 +47,29 @@ void FractalCanvas::drawFractal(NewtonFractal *_fractal) {
             pixels[offset + 2] = color.b;
             pixels[offset + 3] = color.a;
         }
+
+        if(stopFlag) {
+            break;
+        }
     }
+
+    goFlag = true;
 }
 
 
 void FractalCanvas::drawNewFractal() {
     // Begin a new thread for drawing the fractal
 
-    std::thread *drawThread = new std::thread(&FractalCanvas::drawFractal, this, new NewtonFractal);
+    if(drawThread != nullptr) {
+        stopFlag = true;
+        while(!goFlag) {
+            std::this_thread::__sleep_for(std::chrono::duration<int>(0), std::chrono::duration<int>(10000)); // 10 ms
+        }
+        stopFlag = false;
+        goFlag = false;
+    }
+
+    drawThread = new std::thread(&FractalCanvas::drawFractal, this, new NewtonFractal);
 }
 
 

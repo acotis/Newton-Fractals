@@ -10,11 +10,12 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <thread>
 #include "../NewtonFractal.h"
 
 class FractalCanvas {
+    // Drawing components
     sf::Uint8 *pixels;
-
     sf::Image image;
     sf::Texture texture;
     sf::Sprite sprite;
@@ -27,6 +28,11 @@ class FractalCanvas {
     // Shrink factor refers to how much smaller the display is than the image.
     // (Use values > 1 for pixelated display)
     float shrink_factor;
+
+    // Thread management
+    std::thread *drawThread = nullptr;
+    bool stopFlag = false; // Set to indicate that the current draw thread
+    bool goFlag = true;    // Set to indicate that any previous draw thread has stopped and a new one can start
 
     // This method is private because I want it to ALWAYS happen in a new thread
     // and therefore to just kill its own thread when it's done.

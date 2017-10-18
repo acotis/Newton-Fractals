@@ -1,10 +1,13 @@
-Last commit: Create nonfunctional control panel to change resolution
+Last commit: Separate controls UI into generation panel, resolution panel, and save panel.
 
 Tasks for sidebar branch:
-    Next commit: Separate controls UI into generation panel, resolution panel, and save panel.
+    Next commit: Make re-draws stop old draws.
+
+    (Next up: Make sure the threads are actually stopping)
+
+    Next commit: Make resolution button functional (add setImageSize to FractalCanvas class)
     Next commit: Make ClickablePanels resize to accommodate components automatically?
         (Also implement a setMargin() method)
-    Next commit: Make resolution button functional (add setImageSize to FractalCanvas class)
     Next commit: Move root-count and colors to a FractalSettings
     Next commit: Make an on-screen color picker?
     Next commit: Make a root-count picker (maybe a slider?).
