@@ -17,6 +17,7 @@ class ResolutionPicker : public ClickablePanel {
     static const sf::IntRect REQ_BOUNDS;
 
     std::vector<Button*> buttons;
+    int selected = -1;
 
     void constructButtons();
     void selectButton(int nbutton);

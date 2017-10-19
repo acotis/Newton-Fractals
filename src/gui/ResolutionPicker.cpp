@@ -49,10 +49,14 @@ void ResolutionPicker::constructButtons() {
 }
 
 void ResolutionPicker::selectButton(int nbutton) {
+    if(selected == nbutton) return;
+
     for(int i=0; i<NBUTTONS; i++) {
         buttons[i]->setColor(UNSELECT_COLOR);
     }
+
     buttons[nbutton]->setColor(SELECT_COLOR);
+    selected = nbutton;
 
     ControlCenter::setFractalCanvasResolution(nbutton);
 }
