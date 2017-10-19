@@ -11,19 +11,22 @@
 const sf::Color NewtonFractal::ROOT_COLORS[] = {
         //sf::Color(255, 128, 0),
         //sf::Color(255, 80, 120),
-        sf::Color::Red, sf::Color::Blue,
-        sf::Color::White,
-        sf::Color::Red, sf::Color::Blue,
-        sf::Color::Red, sf::Color::Blue,
-        //sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+        //sf::Color::Red, sf::Color::Blue,
+        //sf::Color::Green, sf::Color::Yellow,
+        //sf::Color::Cyan, sf::Color::Magenta, sf::Color::White,
+        //sf::Color::Black,
+        //sf::Color::Green,
+        sf::Color::Red, sf::Color::Green, sf::Color::Blue,
+        sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
+        sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White, sf::Color::White,
 
-//        sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
+//    sf::Color(0, 50, 255), sf::Color::Red, sf::Color::Green,
 //    sf::Color::Yellow, sf::Color::Magenta, sf::Color::Cyan,
 //    sf::Color::White, sf::Color(255, 128, 0)
 };
 
 
-/* Internal functionality */
+/* Internal polynomial functionality */
 
 void NewtonFractal::computeDerivative() {
     std::deque<Complex> polynomialTerms;
@@ -84,12 +87,47 @@ Complex NewtonFractal::evaluateDerivative(Complex input) {
 }
 
 
+/* Internal fractal functionality */
+
+Complex* NewtonFractal::transform(Complex z) {
+    Complex num = evaluatePolynomial(z);
+    Complex den = evaluateDerivative(z);
+    return new Complex(z - num/den);
+}
+
+MaybeColor* NewtonFractal::colorFun(Complex z, int iteration) {
+    // If very close to a root, return the color associated with that root
+    for(int i=0; i<polynomialZeros.size(); i++) {
+        float dist = std::abs(z-polynomialZeros[i]);
+
+        if(dist < .01) {
+            // distAdjust should be 0 for dist = 0 and 1 for dist = .01
+            // It should also make the images look nice and smooth
+            float distAdjust = (float) (sqrt(dist)*10);
+            float shade = ((iteration + distAdjust)/infinity) + .05f;
+            shade = std::min(std::max(shade, 0.0f), 1.0f);
+
+            sf::Color base = ROOT_COLORS[i];
+            base.r *= shade;
+            base.g *= shade;
+            base.b *= shade;
+
+            return new MaybeColor(base, true);
+        }
+    }
+
+    // Else, return black/false
+    return new MaybeColor(sf::Color::Black, false);
+}
+
+
 /* Public functionality */
 
 NewtonFractal::NewtonFractal() {
-    for(int i=0; i<7; i++) {
-        float x = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_WIDTH*1.2f - FractalConstants::VIEW_WIDTH*.6f;
-        float y = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_HEIGHT*1.2f - FractalConstants::VIEW_HEIGHT*.6f;
+    float scale = 5;
+    for(int i=0; i<12; i++) {
+        float x = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_WIDTH*scale - FractalConstants::VIEW_WIDTH*scale*.5f;
+        float y = (rand() / (RAND_MAX + .0f)) * FractalConstants::VIEW_HEIGHT*scale - FractalConstants::VIEW_HEIGHT*scale*.5f;
         polynomialZeros.push_back(Complex(x, y));
         //polynomialZeros.push_back(Complex(x, y));
     }
@@ -108,35 +146,7 @@ NewtonFractal::NewtonFractal() {
     //std::cout << "P(" << test << ") = " << evaluatePolynomial(test) << std::endl;
     //std::cout << "P'(" << test << ") = " << evaluateDerivative(test) << std::endl;
 
-    infinity = 40; // ;-)
-
-    transform = [this](Complex z) {
-        //Complex num = z*z*z - 1.0f;
-        //Complex den = 3.0f*z*z;
-        Complex num = evaluatePolynomial(z);
-        Complex den = evaluateDerivative(z);
-        return new Complex(z - num/den);
-    };
-
-    colorFun = [this](Complex z, int iterations) {
-        // If very close to a root, return the color associated with that root
-        for(int i=0; i<polynomialZeros.size(); i++) {
-            if(std::abs(z-polynomialZeros[i]) < .01) {
-                float shade = ((iterations + .0f)/infinity) + .25f;
-                shade = std::min(std::max(shade, 0.0f), 1.0f);
-
-                sf::Color base = ROOT_COLORS[i];
-                base.r *= shade;
-                base.g *= shade;
-                base.b *= shade;
-
-                return new MaybeColor(base, true);
-            }
-        }
-
-        // Else, return black/false
-        return new MaybeColor(sf::Color::Black, false);
-    };
+    infinity = 80; // ;-)
 };
 
 

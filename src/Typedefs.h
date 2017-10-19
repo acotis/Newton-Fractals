@@ -11,14 +11,7 @@
 
 typedef std::pair<sf::Color,bool> MaybeColor;
 typedef std::complex<float> Complex;
-typedef std::function<Complex*(Complex)> TransformFun;
-typedef std::function<MaybeColor*(Complex, int)> ColorFun;
 
 class NewtonFractal;
-
-struct DrawFractalInfo {
-    NewtonFractal *_fractal;
-    sf::Uint8 *_pixels;
-};
 
 #endif //NEWTONFRACTALS_TYPEDEFS_H

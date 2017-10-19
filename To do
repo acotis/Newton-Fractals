@@ -1,10 +1,29 @@
-+ Make an on-screen save-to-png (or jpg or whatever) button
-+ Make an on-screen polynomial randomizer
-+ Make an on-screen color picker
-+ Make the zeros drag-able
-+ Make it be able to take the coefficients of the terms of the polynomial, not just the roots
+Last commit: Make re-renders always "draw over" the last render.
+
+Tasks for sidebar branch:
+    Next commit: Make pushed-down resolution buttons not do anything when clicked again.
+
+    (Next up: Change FractalCanvas.saveToPNG() to use image.create(width, height, pixels)?)
+
+    Next commit: Make ClickablePanels resize to accommodate components automatically?
+        (Also implement a setMargin() method)
+    Next commit: Move root-count and colors to a FractalSettings
+    Next commit: Make an on-screen color picker?
+    Next commit: Make a root-count picker (maybe a slider?).
+
+    Eventual commit: Separate GUI-generation into two new files: a constants file and a control-panel generation file.
+
+
+Next up: Implement save-settings and load-fractal functionality.
+Next up: Make the zeros drag-able?
+Next commit: Make it be able to take the coefficients of the terms of the polynomial, not just the roots
     (Probably pull polynomial functionality out into a class with methods:
         Polynomial(vector<Complex>) // Construct from zeros
         Polynomial(vector<pair<Complex,int>) // Construct from terms
         getDerivative()
         evaluateAt(Complex))
+
+Bugs:
+    Program sometimes segfaults (?) on close.
+    Fractal smoothness isn't entirely smooth.
+    Some button-texts show up fuzzy.
