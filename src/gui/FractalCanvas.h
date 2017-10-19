@@ -37,7 +37,7 @@ class FractalCanvas {
     void drawFractal();
     void killDrawThread();
 
-    void setPixelCount(long count);
+    void setDimensions(int _imq_width, int _img_height, float _display_shrink);
 
 public:
     FractalCanvas(int _width, int _height, float _display_shrink);

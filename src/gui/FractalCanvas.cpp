@@ -11,14 +11,10 @@
 
 
 FractalCanvas::FractalCanvas(int _width, int _height, float _display_shrink) {
-    img_width = _width;
-    img_height = _height;
     pixels = nullptr;
-    setPixelCount(img_width*img_height);
+    setDimensions(_width, _height, _display_shrink);
 
-    display_shrink = _display_shrink;
     texture.setSmooth(true);
-    sprite.setScale(sf::Vector2f(display_shrink, display_shrink));
 }
 
 FractalCanvas::~FractalCanvas() {
@@ -26,12 +22,23 @@ FractalCanvas::~FractalCanvas() {
 }
 
 
-void FractalCanvas::setPixelCount(long count) {
+void FractalCanvas::setDimensions(int _img_width, int _img_height, float _display_shrink) {
+    std::cout << std::endl << "FractalCanvas::setDimensions(" << _img_width << ", " << _img_height << ", " << _display_shrink << ")" << std::endl;
+
+    img_width = _img_width;
+    img_height = _img_height;
+    display_shrink = _display_shrink;
+
     if(pixels != nullptr) {
         delete pixels;
     }
-    pixels = new sf::Uint8[count*4];
+    pixels = new sf::Uint8[img_width*img_height*4];
 
+    image.create(img_width, img_height, pixels);
+    sf::Vector2u imgSize = image.getSize();
+    std::cout << "imgSize.x = " << imgSize.x;
+
+    std::cout << "  sprite.getScale().x = " << sprite.getScale().x << std::endl;
 }
 
 
@@ -41,8 +48,31 @@ void FractalCanvas::drawFractal() {
     float xStep = FractalConstants::VIEW_WIDTH / img_width;
     float yStep = FractalConstants::VIEW_HEIGHT / img_height;
 
+    std::cout << "img_width = " << img_width << std::endl;
+
+    for(int yPix=0; yPix<img_height; yPix++) {
+        for(int xPix=0; xPix<img_width; xPix++) {
+            int offset = (yPix*img_width + xPix) * 4;
+            pixels[offset] = 0;
+            pixels[offset + 1] = 0;
+            pixels[offset + 2] = 0;
+            pixels[offset + 3] = 0;
+        }
+    }
+
     // Loop and draw
     for(int yPix=0; yPix<img_height; yPix++) {
+        // Draw a red line ahead of the drawing
+        for(int yplus = 1; yPix+yplus<img_height && yplus < 2; yplus++) {
+            for (int xPix = 0; xPix < img_width; xPix++) {
+                int offset = ((yPix + yplus) * img_width + xPix) * 4;
+                pixels[offset] = 255;
+                pixels[offset + 1] = 0;
+                pixels[offset + 2] = 0;
+                pixels[offset + 3] = 255;
+            }
+        }
+
         for(int xPix=0; xPix<img_width; xPix++) {
             float x = xstart + xPix * xStep;
             float y = ystart + yPix * yStep;
@@ -81,11 +111,7 @@ void FractalCanvas::killDrawThread() {
 void FractalCanvas::redrawFractal(int _width, int _height, float _display_shrink) {
     killDrawThread();
 
-    img_width = _width;
-    img_height = _height;
-    display_shrink = _display_shrink;
-    sprite.setScale(sf::Vector2f(display_shrink, display_shrink));
-    setPixelCount(img_width*img_height*4);
+    setDimensions(_width, _height, _display_shrink);
 
     if(fractal == nullptr) return; // If there's no fractal to draw, don't try to draw it
 
@@ -141,7 +167,13 @@ void FractalCanvas::saveToPNG() {
 void FractalCanvas::drawSelf(sf::RenderTarget &target) {
     image.create(img_width, img_height, pixels);
     texture.loadFromImage(image);
-    sprite.setTexture(texture);
+    sprite.setTexture(texture, true);
+    sprite.setScale(sf::Vector2f(display_shrink, display_shrink));
+
+    std::cout << std::endl;
+    std::cout << "image width   = " << image.getSize().x << std::endl;
+    std::cout << "texture width = " << texture.getSize().x << std::endl;
+    std::cout << "sprite width  = " << sprite.getGlobalBounds().width << std::endl;
 
     target.draw(sprite);
 }

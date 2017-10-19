@@ -53,6 +53,6 @@ void ResolutionPicker::selectButton(int nbutton) {
         buttons[i]->setColor(UNSELECT_COLOR);
     }
     buttons[nbutton]->setColor(SELECT_COLOR);
-    
+
     ControlCenter::setFractalCanvasResolution(nbutton);
 }
