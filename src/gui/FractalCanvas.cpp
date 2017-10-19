@@ -28,13 +28,14 @@ void FractalCanvas::setDimensions(int _img_width, int _img_height, float _displa
     img_width = _img_width;
     img_height = _img_height;
     display_shrink = _display_shrink;
+    draw_height = 1;
 
     if(pixels != nullptr) {
         delete pixels;
     }
     pixels = new sf::Uint8[img_width*img_height*4];
 
-    image.create(img_width, img_height, pixels);
+    //image.create(img_width, img_height, pixels);
     sf::Vector2u imgSize = image.getSize();
     std::cout << "imgSize.x = " << imgSize.x;
 
@@ -62,16 +63,7 @@ void FractalCanvas::drawFractal() {
 
     // Loop and draw
     for(int yPix=0; yPix<img_height; yPix++) {
-        // Draw a red line ahead of the drawing
-        for(int yplus = 1; yPix+yplus<img_height && yplus < 2; yplus++) {
-            for (int xPix = 0; xPix < img_width; xPix++) {
-                int offset = ((yPix + yplus) * img_width + xPix) * 4;
-                pixels[offset] = 255;
-                pixels[offset + 1] = 0;
-                pixels[offset + 2] = 0;
-                pixels[offset + 3] = 255;
-            }
-        }
+        draw_height = yPix+2;
 
         for(int xPix=0; xPix<img_width; xPix++) {
             float x = xstart + xPix * xStep;
@@ -84,6 +76,15 @@ void FractalCanvas::drawFractal() {
             pixels[offset + 1] = color.g;
             pixels[offset + 2] = color.b;
             pixels[offset + 3] = color.a;
+
+            // Draw red line ahead of drawing
+            if(yPix + 1 < img_height) {
+                int offsetAhead = ((yPix + 1) * img_width + xPix) * 4;
+                pixels[offsetAhead] = 255;
+                pixels[offsetAhead + 1] = 0;
+                pixels[offsetAhead + 2] = 0;
+                pixels[offsetAhead + 3] = 255;
+            }
         }
 
         if(stopFlag) {
@@ -165,15 +166,10 @@ void FractalCanvas::saveToPNG() {
 
 
 void FractalCanvas::drawSelf(sf::RenderTarget &target) {
-    image.create(img_width, img_height, pixels);
+    image.create(img_width, draw_height, pixels);
     texture.loadFromImage(image);
     sprite.setTexture(texture, true);
     sprite.setScale(sf::Vector2f(display_shrink, display_shrink));
-
-    std::cout << std::endl;
-    std::cout << "image width   = " << image.getSize().x << std::endl;
-    std::cout << "texture width = " << texture.getSize().x << std::endl;
-    std::cout << "sprite width  = " << sprite.getGlobalBounds().width << std::endl;
 
     target.draw(sprite);
 }

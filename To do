@@ -1,7 +1,7 @@
-Last commit: Make resolution button functional (add setImageSize to FractalCanvas class)
+Last commit: Fixed massive bug where different resolutions rendered wrong.
 
 Tasks for sidebar branch:
-    Next commit: Make drawFractal() draw a black line in front of it so the drawing is visible.
+    Next commit: Make re-renders always "draw over" the last render.
 
     (Next up: Change FractalCanvas.saveToPNG() to use image.create(width, height, pixels)?)
 

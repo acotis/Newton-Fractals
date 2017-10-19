@@ -27,6 +27,7 @@ class FractalCanvas {
     int img_width;  // Dimensions of internal image
     int img_height;
     float display_shrink;
+    int draw_height; // Height of finished part of image
 
     // Thread management
     std::thread *drawThread = nullptr;
