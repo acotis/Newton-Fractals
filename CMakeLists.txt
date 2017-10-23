@@ -3,7 +3,7 @@ project(NewtonFractals)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "/home/evan/Programs/C++/CLionProjects/NewtonFractals/cmake-build-debug")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(SOURCE_FILES src/main.cpp src/Constants.h src/NewtonFractal.cpp src/NewtonFractal.h src/Typedefs.h src/gui/Button.cpp src/gui/Button.h src/gui/FractalCanvas.cpp src/gui/FractalCanvas.h src/gui/ClickablePanel.cpp src/gui/ClickablePanel.h src/gui/Clickable.h src/gui/ResolutionPicker.cpp src/gui/ResolutionPicker.h src/gui/ControlCenter.h)
 add_executable(NewtonFractals ${SOURCE_FILES})
